@@ -105,7 +105,6 @@ pub fn gauge(args: TokenStream, item: TokenStream) -> TokenStream {
 
     let extern_name = args.name.unwrap_or_else(|| input.sig.ident.to_string());
     let extern_gauge_name = format_ident!("{}_gauge_callback", extern_name);
-    let extern_mouse_name = format_ident!("{}_mouse_callback", extern_name);
 
     let output = quote! {
         #input
@@ -132,17 +131,7 @@ pub fn gauge(args: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
-        #[doc(hidden)]
-        #[no_mangle]
-        pub extern "C" fn #extern_mouse_name(
-            fx: std::os::raw::c_float,
-            fy: std::os::raw::c_float,
-            i_flags: std::os::raw::c_uint,
-        ) {
-             unsafe {
-                #executor_name.handle_mouse(fx, fy, i_flags);
-             }
-         }
+ 
     };
 
     TokenStream::from(output)

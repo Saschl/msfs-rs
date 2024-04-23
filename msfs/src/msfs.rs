@@ -100,10 +100,10 @@ impl GaugeExecutor {
             service_id => {
                 if let Some(data) = match service_id {
                     sys::PANEL_SERVICE_POST_INSTALL => Some(MSFSEvent::PostInstall),
-                    sys::PANEL_SERVICE_PRE_INITIALIZE => Some(MSFSEvent::PreInitialize),
-                    sys::PANEL_SERVICE_POST_INITIALIZE => Some(MSFSEvent::PostInitialize),
-                    sys::PANEL_SERVICE_PRE_UPDATE => Some(MSFSEvent::PreUpdate),
-                    sys::PANEL_SERVICE_POST_UPDATE => Some(MSFSEvent::PostUpdate),
+                  /*   sys::PANEL_SERVICE_PRE_INITIALIZE => Some(MSFSEvent::PreInitialize),
+                    sys::PANEL_SERVICE_POST_INITIALIZE => Some(MSFSEvent::PostInitialize), */
+                  /*   sys::PANEL_SERVICE_PRE_UPDATE => Some(MSFSEvent::PreUpdate),
+                    sys::PANEL_SERVICE_POST_UPDATE => Some(MSFSEvent::PostUpdate), */
                     sys::PANEL_SERVICE_PRE_DRAW => Some(MSFSEvent::PreDraw(unsafe {
                         &*(p_data as *const sys::sGaugeDrawData)
                     })),
@@ -121,11 +121,7 @@ impl GaugeExecutor {
         }
     }
 
-    pub fn handle_mouse(&mut self, x: f32, y: f32, flags: u32) {
-        self.executor
-            .send(Some(MSFSEvent::Mouse { x, y, flags }))
-            .unwrap();
-    }
+  
 }
 
 pub struct StandaloneModule {
