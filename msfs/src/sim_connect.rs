@@ -534,8 +534,8 @@ impl<'a> SimConnect<'a> {
         }
         Ok(())
     }
-    
-    pub fn close(self) -> Result<()> {
+
+    pub fn close(&self) -> Result<()> {
         unsafe {
             map_err(sys::SimConnect_Close(self.handle)).expect("SimConnect_Close");
         }
