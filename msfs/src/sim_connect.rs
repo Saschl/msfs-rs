@@ -534,16 +534,25 @@ impl<'a> SimConnect<'a> {
         }
         Ok(())
     }
+    
+    pub fn close(self) -> Result<()> {
+        unsafe {
+            map_err(sys::SimConnect_Close(self.handle)).expect("SimConnect_Close");
+        }
+        Ok(())
+    }
 }
 
-impl<'a> Drop for SimConnect<'a> {
+
+
+/* impl<'a> Drop for SimConnect<'a> {
     fn drop(&mut self) {
         unsafe {
             map_err(sys::SimConnect_Close(self.handle)).expect("SimConnect_Close");
         }
     }
 }
-
+ */
 macro_rules! recv {
     ($V:ident) => {
         $V! {
