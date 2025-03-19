@@ -81,6 +81,7 @@ impl<'a> SimConnect<'a> {
                 0,
                 0,
             ))?;
+            println!("SimConnect handle: {:?}", handle);
             debug_assert!(handle != 0);
             let mut sim = Box::pin(SimConnect {
                 handle,
