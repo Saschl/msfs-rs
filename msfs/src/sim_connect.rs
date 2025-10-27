@@ -593,6 +593,7 @@ impl<'a> SimConnect<'a> {
 
 impl Drop for SimConnect<'_> {
     fn drop(&mut self) {
+        println!("SimConnect: Dropping SimConnect instance");
         unsafe {
             map_err(sys::SimConnect_Close(self.handle)).expect("SimConnect_Close");
         }
