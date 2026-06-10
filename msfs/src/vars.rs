@@ -44,7 +44,7 @@ impl AircraftVariableApi {
     pub fn from(name: &str, units: &str, index: u32) -> Result<Self, Box<dyn std::error::Error>> {
         let name_cstr = std::ffi::CString::new(name).unwrap();
         let units_cstr = std::ffi::CString::new(units).unwrap();
-        let var = unsafe { let result = sys::fsVarsGetAircraftVarId(name_cstr.as_ptr());
+        let var = unsafe { let result = sys::fsVarsGetAVarId(name_cstr.as_ptr());
             if result == -1 {
                 println!("Error getting aircraft var id for {} with error {}", name, result);
             }
@@ -70,7 +70,7 @@ impl AircraftVariableApi {
         let mut v = 0.0;
 
         with_params(&[FsParam::Integer(self.index)], |params_for_get| unsafe {
-            sys::fsVarsAircraftVarGet(self.simvar, self.units, params_for_get, &mut v);
+            sys::fsVarsAVarGet(self.simvar, self.units, params_for_get, &mut v, sys::FS_OBJECT_ID_USER_AIRCRAFT);
         });
 
 
@@ -83,7 +83,7 @@ impl AircraftVariableApi {
         let v: f64 = value.to();
 
         with_params(&[FsParam::Integer(self.index)], |params_for_set| unsafe { 
-            let retval = sys::fsVarsAircraftVarSet(self.simvar, self.units, params_for_set, v);
+            let retval = sys::fsVarsAVarSet(self.simvar, self.units, params_for_set, v, sys::FS_OBJECT_ID_USER_AIRCRAFT);
 
             if retval != 0 {
                 println!("Error setting aircraft var: {:?} for {:?} : {:?}, value {:?}", retval, self.name, self.index, v);
