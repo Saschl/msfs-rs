@@ -19,7 +19,7 @@ impl FsParam<'_> {
             Self::String(v) => sys::FsVarParamVariant {
                 type_: sys::eFsVarParamType_FsVarParamTypeString,
                 __bindgen_anon_1: sys::FsVarParamVariant__bindgen_ty_1 {
-                    stringValue: v.as_ptr(),
+                    stringValue: v.as_ptr() as *mut i8,
                 },
             },
             Self::Crc(v) => sys::FsVarParamVariant {
