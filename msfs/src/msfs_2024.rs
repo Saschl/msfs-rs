@@ -6,7 +6,7 @@ pub use msfs_derive::{gauge2024, system};
 /// Used in Systems to dispatch lifetime events and SimConnect events.
 #[derive(Debug)]
 pub enum MSFS2024SystemEvent<'a> {
-    Init(&'a sys::sSystemInstallData),
+    Init(sys::sSystemInstallData),
     Update(std::os::raw::c_float),
     Kill,
     SimConnect(SimConnectRecv<'a>),
@@ -63,7 +63,7 @@ impl SystemExecutor {
     pub fn handle_systems_init(
         &mut self,
         ctx: sys::FsContext,
-        p_install_data: *const sys::sSystemInstallData,
+        p_install_data: &sys::sSystemInstallData,
     ) -> bool {
         let executor = self as *mut SystemExecutor;
         self.fs_ctx = Some(ctx);
@@ -71,7 +71,7 @@ impl SystemExecutor {
             .start(Box::new(move |rx| System { executor, rx }))
             .and_then(|()| {
                 self.executor
-                    .send(Some(MSFS2024SystemEvent::Init(unsafe { &*p_install_data })))
+                    .send(Some(MSFS2024SystemEvent::Init(*p_install_data)))
             })
             .is_ok()
     }
@@ -97,9 +97,9 @@ impl SystemExecutor {
 /// Used in MSFS 2024 Gauges to dispatch lifetime events, mouse events, and SimConnect events.
 #[derive(Debug)]
 pub enum MSFS2024GaugeEvent<'a> {
-    Init(&'a sys::sGaugeInstallData),
+    Init(sys::sGaugeInstallData),
     Update(std::os::raw::c_float),
-    Draw(&'a sys::sGaugeDrawData),
+    Draw(sys::sGaugeDrawData),
     Kill,
     Mouse { x: f32, y: f32, flags: i32 },
     SimConnect(SimConnectRecv<'a>),
@@ -156,7 +156,7 @@ impl Gauge2024Executor {
     pub fn handle_gauge_init(
         &mut self,
         ctx: sys::FsContext,
-        p_install_data: *const sys::sGaugeInstallData,
+        p_install_data: &sys::sGaugeInstallData,
     ) -> bool {
         let executor = self as *mut Gauge2024Executor;
         self.fs_ctx = Some(ctx);
@@ -164,7 +164,7 @@ impl Gauge2024Executor {
             .start(Box::new(move |rx| Gauge2024 { executor, rx }))
             .and_then(|()| {
                 self.executor
-                    .send(Some(MSFS2024GaugeEvent::Init(unsafe { &*p_install_data })))
+                    .send(Some(MSFS2024GaugeEvent::Init(*p_install_data)))
             })
             .is_ok()
     }
@@ -182,10 +182,10 @@ impl Gauge2024Executor {
     pub fn handle_gauge_draw(
         &mut self,
         _ctx: sys::FsContext,
-        p_draw_data: *const sys::sGaugeDrawData,
+        p_draw_data: &sys::sGaugeDrawData,
     ) -> bool {
         self.executor
-            .send(Some(MSFS2024GaugeEvent::Draw(unsafe { &*p_draw_data })))
+            .send(Some(MSFS2024GaugeEvent::Draw(*p_draw_data)))
             .is_ok()
     }
 
