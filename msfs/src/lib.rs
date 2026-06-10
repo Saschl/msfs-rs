@@ -43,7 +43,6 @@ pub use msfs_2024::*;
 pub mod legacy;
 
 #[cfg(any(target_arch = "wasm32", doc))]
-#[cfg(feature = "msfs_2024")]
 pub mod vars;
 
 #[cfg(any(target_arch = "wasm32", doc))]
