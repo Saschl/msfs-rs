@@ -31,18 +31,21 @@ impl FsParam<'_> {
 }
 
 pub(crate) fn with_params<R>(params: &[FsParam<'_>], f: impl FnOnce(sys::FsVarParamArray) -> R) -> R {
+
+    //let mut array = Vec::<sys::FsVarParamVariant>::with_capacity(1);
+
     let mut variants: Vec<sys::FsVarParamVariant> =
         params.iter().copied().map(FsParam::to_variant).collect();
 
-    let array = if variants.is_empty() {
+   /*  let array = if variants.is_empty() {
         std::ptr::null_mut()
     } else {
         variants.as_mut_ptr()
-    };
+    }; */
 
     let ffi_params = sys::FsVarParamArray {
         size: variants.len() as u32,
-        array,
+        array: Box::into_raw(variants.into_boxed_slice()) as *mut sys::FsVarParamVariant,
     };
 
     f(ffi_params)
