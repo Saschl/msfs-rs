@@ -72,14 +72,10 @@ impl AircraftVariableApi {
         with_params(&[FsParam::Integer(self.index)], |params_for_get| unsafe {
             sys::fsVarsAVarGet(self.simvar, self.units, params_for_get, &mut v, sys::FS_OBJECT_ID_USER_AIRCRAFT);
         });
-
-
-
         T::from(v)
     }
 
      pub fn set(&self, value: impl SimVarF64) {
-
         let v: f64 = value.to();
 
         with_params(&[FsParam::Integer(self.index)], |params_for_set| unsafe { 
@@ -89,7 +85,5 @@ impl AircraftVariableApi {
                 println!("Error setting aircraft var: {:?} for {:?} : {:?}, value {:?}", retval, self.name, self.index, v);
             }
         });
-
-        
     } 
 }
