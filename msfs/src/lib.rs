@@ -43,6 +43,13 @@ pub use msfs_2024::*;
 pub mod legacy;
 
 #[cfg(any(target_arch = "wasm32", doc))]
+pub mod legacy;
+
+#[cfg(any(target_arch = "wasm32", doc))]
+#[cfg(feature = "msfs_2024")]
+pub mod vars;
+
+#[cfg(any(target_arch = "wasm32", doc))]
 pub mod nvg;
 
 #[cfg(any(target_arch = "wasm32", doc))]
@@ -50,6 +57,9 @@ pub mod network;
 
 #[cfg(any(target_arch = "wasm32", doc))]
 pub mod commbus;
+
+#[cfg(any(target_arch = "wasm32", doc))]
+pub(crate) mod sim_param_array;
 
 #[doc(hidden)]
 pub mod executor;

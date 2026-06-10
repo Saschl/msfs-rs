@@ -1,5 +1,6 @@
 //! Bindings to the Legacy/gauges.h API
 
+use crate::sim_param_array::{with_params, FsParam};
 use crate::sys;
 
 #[doc(hidden)]
@@ -112,28 +113,12 @@ pub fn trigger_key_event(event_id: sys::ID32, value: sys::UINT32) {
 }
 
 pub fn fs_events_trigger_key_event(event_id: sys::FsEventId, value0: sys::UINT32, value1:sys::UINT32) {
-
-    let mut array = Vec::<sys::FsVarParamVariant>::with_capacity(2);
-
-    array.push(sys::FsVarParamVariant {
-        type_: sys::eFsVarParamType_FsVarParamTypeInteger,
-        __bindgen_anon_1: sys::FsVarParamVariant__bindgen_ty_1 { 
-            intValue: value0,
+    with_params(
+        &[FsParam::Integer(value0), FsParam::Integer(value1)],
+        |params_for_get| unsafe {
+            sys::fsEventsTriggerKeyEvent(event_id, params_for_get);
         },
-    });
-    array.push(sys::FsVarParamVariant {
-        type_: sys::eFsVarParamType_FsVarParamTypeInteger,
-        __bindgen_anon_1: sys::FsVarParamVariant__bindgen_ty_1 { 
-            intValue: value1,
-        },
-    });
-    let params_for_get = sys::FsVarParamArray {
-            size: 2,
-            array: Box::into_raw(array.into_boxed_slice()) as *mut sys::FsVarParamVariant,
-    };
-    unsafe {
-        sys::fsEventsTriggerKeyEvent(event_id, params_for_get);
-    }
+    );
 } 
 
 /// trigger_key_event_EX1
